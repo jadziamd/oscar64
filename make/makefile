@@ -37,6 +37,16 @@ else
 	endif
 endif
 
+# Random number generation selection
+RNG_METHOD ?= BS
+
+ifeq ($(RNG_METHOD), BS)
+	CPPFLAGS += -DUSE_BS_RAND
+else ifeq ($(RNG_METHOD), LCG)
+	CPPFLAGS += -DUSE_LCG_RAND
+else
+	$(error Invalid RNG_METHOD specified. Use 'BS' or 'LCG')
+endif
 
 all: --prep-build-dir compiler samples tests
 
@@ -121,6 +131,6 @@ endif
 
 
 --prep-build-dir:
-	echo "makedir"
+	@echo "Creating build directories..."
 	@if [ ! -d $(srcdir) ]; then $(MKDIR_PARENT) $(srcdir); fi
 	@if [ ! -d $(project_dir)/bin ]; then $(MKDIR_PARENT)  $(project_dir)/bin; fi

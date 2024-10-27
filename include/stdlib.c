@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include "math.h"
 #include "crt.h"
+#include "stdint.h"
 
 void itoa(int n, char * s, unsigned radix)
 {
@@ -671,9 +672,16 @@ static unsigned seed = 31232;
 
 unsigned int rand(void)
 {
-    seed ^= seed << 7;
-    seed ^= seed >> 9;
-    seed ^= seed << 8;
+#ifdef USE_LCG_RAND // Linear Congruential Generator
+	static const unsigned long multiplier = 1664525ul;
+	static const unsigned long increment = 1013904223ul;
+	static const unsigned long modulus = UINT32_MAX;
+	seed = (unsigned)(multiplier * seed + increment) % modulus;
+#else // USE_BS_RAND, Bitshit Generator
+	seed ^= seed << 7;
+	seed ^= seed >> 9;
+	seed ^= seed << 8;
+#endif
 	return seed;
 }
 

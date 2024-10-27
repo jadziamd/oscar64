@@ -96,6 +96,10 @@ To build everything:
 
 * make -C make all
 
+The default random number generation is a simple bit-shift generator, to use a linear congruential generator build using the following:
+
+* make -C make RNG_METHOD=LCG all 
+
 ### Compiler arguments
 
 The compiler is command line driven, and creates an executable .prg file.
